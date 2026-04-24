@@ -1,5 +1,35 @@
 const net = require('net');
+const os = require('os');
 const { spawn } = require('child_process');
+
+function getConnectHosts(host) {
+  if (host !== '0.0.0.0') {
+    return [host];
+  }
+
+  const interfaces = os.networkInterfaces();
+  const hosts = new Set(['127.0.0.1']);
+
+  for (const addresses of Object.values(interfaces)) {
+    for (const address of addresses || []) {
+      if (address.family !== 'IPv4' || address.internal) continue;
+      hosts.add(address.address);
+    }
+  }
+
+  return [...hosts];
+}
+
+function printConnectHints(host, port) {
+  const connectHosts = getConnectHosts(host);
+
+  console.log(`Listening on ${host}:${port} - WARNING: unauthenticated shell`);
+  console.log('Connect using netcat:');
+
+  for (const connectHost of connectHosts) {
+    console.log(`  nc ${connectHost} ${port}`);
+  }
+}
 
 function createServer() {
   return net.createServer({ allowHalfOpen: true }, (socket) => {
@@ -55,7 +85,7 @@ function startServer({ host, port }) {
   const server = createServer();
 
   server.listen(port, host, () => {
-    console.log(`Listening on ${host}:${port} - WARNING: unauthenticated shell`);
+    printConnectHints(host, port);
   });
 
   return server;

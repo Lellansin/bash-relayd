@@ -4,28 +4,44 @@ A minimal TCP server that executes one `bash -c "<command>"` per client connecti
 
 ## Usage
 
-Run directly:
+Run directly with `npx` without the install confirmation prompt:
 
 ```bash
-npx bash-relayd
+npx --yes bash-relayd
 ```
 
-Custom port/host:
+Run on a custom port and host:
 
 ```bash
-npx bash-relayd 5555 127.0.0.1
+npx --yes bash-relayd 5555 127.0.0.1
 ```
 
-Or via environment variables:
+Run with environment variables:
 
 ```bash
-PORT=5555 HOST=127.0.0.1 npx bash-relayd
+PORT=5555 HOST=127.0.0.1 npx --yes bash-relayd
 ```
 
 Show help:
 
 ```bash
-npx bash-relayd --help
+npx --yes bash-relayd --help
+```
+
+When the server starts, it prints ready-to-run `nc` commands for each detected local IPv4 address. A typical startup output looks like this:
+
+```text
+Listening on 0.0.0.0:4444 - WARNING: unauthenticated shell
+Connect using netcat:
+  nc 127.0.0.1 4444
+  nc 192.168.1.23 4444
+  nc 10.0.0.8 4444
+```
+
+After connecting, send a single command followed by a newline:
+
+```bash
+printf 'uname -a\n' | nc 127.0.0.1 4444
 ```
 
 ## Local Development
@@ -33,19 +49,6 @@ npx bash-relayd --help
 ```bash
 npm install
 npm run start
-```
-
-## Publish to npm
-
-1. Make sure package name is available (`npm view bash-relayd --registry=https://registry.npmjs.org`).
-2. Update `name` and `version` in `package.json` if needed.
-3. Login: `npm login`
-4. Publish: `npm publish --access public`
-
-After publishing, users can run it with:
-
-```bash
-npx bash-relayd
 ```
 
 ## Warning
