@@ -1,0 +1,35 @@
+{
+  "name": "bash-relayd",
+  "version": "0.1.0",
+  "description": "A tiny TCP server that runs one bash command per connection",
+  "bin": {
+    "bash-relayd": "./bin/bash-relayd.js"
+  },
+  "main": "./src/server.js",
+  "scripts": {
+    "start": "node ./bin/bash-relayd.js",
+    "check": "node ./bin/bash-relayd.js --help",
+    "prepublishOnly": "npm run check"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "keywords": [
+    "bash",
+    "tcp",
+    "server",
+    "cli",
+    "relay"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lellansin/bash-relayd.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Lellansin/bash-relayd/issues"
+  },
+  "homepage": "https://github.com/Lellansin/bash-relayd#readme",
+  "license": "MIT"
+}
