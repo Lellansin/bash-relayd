@@ -1,6 +1,6 @@
 {
   "name": "bash-relayd",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A tiny TCP server that runs one bash command per connection",
   "bin": {
     "bash-relayd": "bin/bash-relayd.js"
@@ -9,6 +9,7 @@
   "scripts": {
     "start": "node ./bin/bash-relayd.js",
     "check": "node ./bin/bash-relayd.js --help",
+    "test": "node --test",
     "prepublishOnly": "npm run check"
   },
   "files": [

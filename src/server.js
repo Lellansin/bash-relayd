@@ -31,6 +31,10 @@ function printConnectHints(host, port) {
   }
 }
 
+function normalizeCommand(command) {
+  return command.replace(/\0/g, '\\0');
+}
+
 function createServer() {
   return net.createServer({ allowHalfOpen: true }, (socket) => {
     console.log(`Connection from ${socket.remoteAddress}:${socket.remotePort}`);
@@ -39,9 +43,17 @@ function createServer() {
     let shell = null;
 
     const startShell = (command) => {
-      shell = spawn('bash', ['-c', command], {
-        env: { ...process.env, TERM: 'xterm' },
-      });
+      const normalizedCommand = normalizeCommand(command);
+
+      try {
+        shell = spawn('bash', ['-c', normalizedCommand], {
+          env: { ...process.env, TERM: 'xterm' },
+        });
+      } catch (error) {
+        socket.end(`${error.message}\n`);
+        console.error(error);
+        return;
+      }
 
       shell.stdout.pipe(socket);
       shell.stderr.pipe(socket);
@@ -93,5 +105,6 @@ function startServer({ host, port }) {
 
 module.exports = {
   createServer,
+  normalizeCommand,
   startServer,
 };
