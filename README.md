@@ -38,6 +38,20 @@ Connect using netcat:
   nc 10.0.0.8 4444
 ```
 
+## AI Agent Prompt
+
+A common `npx` workflow is to start `bash-relayd`, copy one of the printed `nc` commands, and give it to an AI coding agent such as Claude Code:
+
+```text
+You can run shell commands on my machine by sending one command per connection to:
+
+nc 192.168.1.23 4444
+
+Use it when you need to inspect files, run tests, or execute project commands. Send exactly one command followed by a newline for each request.
+```
+
+Replace `192.168.1.23 4444` with the host and port printed by your own `bash-relayd` process.
+
 After connecting, send a single command followed by a newline:
 
 ```bash
